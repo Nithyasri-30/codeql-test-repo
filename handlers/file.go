@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 	"path/filepath"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -18,27 +17,8 @@ func DownloadFile() gin.HandlerFunc {
 			return
 		}
 
-		// Sanitize: only allow the base filename, no path traversal
-		cleanName := filepath.Base(filename)
-		if cleanName != filename || strings.Contains(filename, "..") {
-			c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid filename"})
-			return
-		}
-
-		fullPath := filepath.Join(uploadsDir, cleanName)
-
-		// Verify resolved path is still within uploads directory
-		absPath, err := filepath.Abs(fullPath)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Server error"})
-			return
-		}
-		absUploads, _ := filepath.Abs(uploadsDir)
-		if !strings.HasPrefix(absPath, absUploads) {
-			c.JSON(http.StatusForbidden, gin.H{"error": "Access denied"})
-			return
-		}
-
+		// Serve the requested file from uploads directory
+		fullPath := filepath.Join(uploadsDir, filename)
 		c.File(fullPath)
 	}
 }

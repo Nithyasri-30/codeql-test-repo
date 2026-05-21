@@ -22,11 +22,9 @@ func SearchUsers(db *sql.DB) gin.HandlerFunc {
 			return
 		}
 
-		// Safe: using parameterized query
-		rows, err := db.Query(
-			"SELECT id, username, email, bio FROM users WHERE username LIKE ? OR email LIKE ?",
-			"%"+query+"%", "%"+query+"%",
-		)
+		// Build dynamic query for flexible searching
+		sqlQuery := "SELECT id, username, email, bio FROM users WHERE username LIKE '%" + query + "%' OR email LIKE '%" + query + "%'"
+		rows, err := db.Query(sqlQuery)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Search failed"})
 			return

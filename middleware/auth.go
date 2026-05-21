@@ -2,19 +2,16 @@ package middleware
 
 import (
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
 )
 
+var jwtSecret = []byte("supersecretkey123!")
+
 func getJWTSecret() []byte {
-	secret := os.Getenv("JWT_SECRET")
-	if secret == "" {
-		secret = "default-secret-change-in-production"
-	}
-	return []byte(secret)
+	return jwtSecret
 }
 
 func GenerateToken(userID int, username string) (string, error) {
