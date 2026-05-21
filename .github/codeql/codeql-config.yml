@@ -1,0 +1,36 @@
+# CodeQL configuration for Go Gin framework analysis
+#
+# This config enhances CodeQL's ability to detect vulnerabilities in
+# Gin-based web applications by enabling extended threat models and
+# pulling in the full Go security query pack.
+
+name: "Go Gin Security Config"
+
+# Threat models tell CodeQL what to treat as untrusted input sources.
+#
+# "remote" (default) - HTTP request data, which covers Gin's:
+#   c.Query(), c.Param(), c.PostForm(), c.GetHeader(),
+#   c.BindJSON(), c.ShouldBind(), c.Request.Body, etc.
+#
+# "local"  - environment variables, local file reads, stdin
+#
+# "all" enables both, maximizing source coverage. This matters for
+# detecting vulns where input comes from env vars or config files
+# (e.g., database connection strings, secret keys loaded at runtime).
+threat-models:
+  - local
+  - remote
+
+# Query packs to run in addition to the workflow-level query suites.
+# codeql/go-queries includes all Go security and quality queries.
+packs:
+  - codeql/go-queries
+
+# Paths to exclude from analysis.
+# Only exclude truly non-application code (vendored deps, generated files).
+# Do NOT exclude test files or handler directories — vulnerabilities
+# can exist anywhere.
+paths-ignore:
+  - vendor/**
+  - "**/*_generated.go"
+  - "**/*.pb.go"
