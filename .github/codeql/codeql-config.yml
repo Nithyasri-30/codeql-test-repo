@@ -26,6 +26,11 @@ threat-models:
 packs:
   - codeql/go-queries
 
+# Local custom queries that extend CodeQL's Gin framework coverage.
+# These model sinks (e.g., c.Redirect) that the default Go pack doesn't cover.
+queries:
+  - uses: ./.github/codeql/custom-queries/go
+
 # Paths to exclude from analysis.
 # Only exclude truly non-application code (vendored deps, generated files).
 # Do NOT exclude test files or handler directories — vulnerabilities

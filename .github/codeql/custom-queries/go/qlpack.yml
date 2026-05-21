@@ -1,0 +1,9 @@
+# QL pack definition for custom Go security queries.
+# CodeQL requires a qlpack.yml in every directory that contains .ql files.
+# The dependency on codeql/go-all provides access to Go's standard library
+# models, taint tracking, and dataflow framework.
+
+name: custom-go-queries
+version: 0.0.1
+dependencies:
+  codeql/go-all: "*"
