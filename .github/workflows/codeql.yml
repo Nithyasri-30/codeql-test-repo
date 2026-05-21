@@ -54,13 +54,10 @@ jobs:
           languages: go
           build-mode: autobuild
           config-file: .github/codeql/codeql-config.yml
-          # +security-extended,security-and-quality: standard query suites
-          # .github/codeql/custom-queries/go: local custom queries that model
-          #   Gin framework sinks not covered by the default Go query pack
-          queries: |
-            +security-extended
-            +security-and-quality
-            ./.github/codeql/custom-queries/go
+          # Query suites must be comma-separated on a single line.
+          # The "+" prefix merges with queries defined in the config file.
+          # Custom queries are referenced from codeql-config.yml, not here.
+          queries: +security-extended,security-and-quality
 
       # Autobuild detects Go modules and runs `go build ./...` automatically.
       # No manual build step needed for standard Go projects.
